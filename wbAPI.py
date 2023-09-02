@@ -13,6 +13,13 @@ class wbAPI(object):
     """
 
     def __init__(self, countries: list, series: dict, dateRange: range) -> None:
+        """
+        Parameters:
+            countries (list): Liste der ISO3-Codes von Ländern, für die Zeitreihen heruntergeladen werden sollten.
+            series (dict): Dictionary von Weltbank Zeitreihen IDs als  keys und den sprechenden Namen als value.
+            dateRange (range): Range für die die Daten heruntergelanden werden sollen in Jahren.
+        """
+        
         self.countries = countries
         self.series = series
         self.dateRange = dateRange
@@ -24,12 +31,6 @@ class wbAPI(object):
         * Dokumentation:
             https://blogs.worldbank.org/opendata/introducing-wbgapi-
             new-python-package-accessing-world-bank-data
-
-
-        Parameters:
-            countries (list): Liste der ISO3-Codes von Ländern, für die Zeitreihen heruntergeladen werden sollten.
-            series (dict): Dictionary von Weltbank Zeitreihen IDs als  keys und den sprechenden Namen als value.
-            dateRange (range): Range für die die Daten heruntergelanden werden sollen in Jahren.
         """
 
         # Für eine sinnvolle benamung werden die Zeitreihen IDs in einem
