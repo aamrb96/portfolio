@@ -7,9 +7,9 @@ class faostatAPI(object):
     Agriculture Organization".
     """
 
-    def __init__(self, countries: list, series: dict) -> None:
-        self.countries = countries
-        self.series = series
+    def __init__(self, **kwargs) -> None:
+        self.countries = kwargs.get("COUNTRIES")
+        self.series = kwargs.get("SERIES")
         self.implemented_faostat_databases = ["FS"]
 
     def _check_if_database_implemented(self):
@@ -80,16 +80,16 @@ class faostatAPI(object):
         return self.faostatData
 
 if __name__ == "__main__":
-    COUNTRIES = ["Ethiopia", "Kenya", "Somalia"]
+    config = {
+        "WB": {
+            "COUNTRIES": ["KEN", "SOM"],
+            "SERIES": {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"},
+            "DATERANGE": range(2000, 2024),
+        },
+        "FAO": {
+            "COUNTRIES": ["Ethiopia", "Kenya", "Somalia"],
+            "SERIES": {"FS": {"21001": "Number of people undernourished mil"}},
+        },
+    }
 
-    # Die key-value Paare innerhalb der Datenbanken werden für 
-    # die Umbennung der Spalten genutzt
-    FAOSTAT_SERIES = {
-        "FS": {
-            "21001": "Number of people undernourished mil"
-            }
-        }
-
-    faostat_data = faostatAPI(countries=COUNTRIES, series=FAOSTAT_SERIES).main()
-
-    type(faostat_data)
+    faostat_data = faostatAPI(**config["FAO"]).main()
