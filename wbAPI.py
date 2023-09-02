@@ -48,7 +48,7 @@ class wbAPI(object):
 
         self.wbData = data
 
-    def transform_wb_data(self) -> pd.DataFrame:
+    def transform_wb_data(self):
         """
         Funktion um die Weltbank Daten in ein Datenformat zu bringen,
         welches gut in SQLite abgespeichert werden kann und die
