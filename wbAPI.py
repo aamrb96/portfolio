@@ -3,6 +3,15 @@ import pandas as pd
 
 
 class wbAPI(object):
+    """
+    Implementierung eines objektorientierten Programms zur Extraktion von
+    Weltbankdaten. Die Zeitreihen werden für die angegebenen Länder und den
+    Datumsbereich abgerufen. Anschließend werden sie von einem "long-format"
+    in ein "wide-format" umgewandelt.
+
+    Die Methode main() orchestriert alle Methoden innerhalb der Klasse.
+    """
+
     def __init__(self, countries: list, series: dict, dateRange: range) -> None:
         self.countries = countries
         self.series = series
@@ -12,14 +21,15 @@ class wbAPI(object):
         """
         Funktion, die Daten der Weltbank extrahiert,
         indem sie sich mit der offiziellen und öffentlichen Weltbank-API verbindet.
-        * Dokumentation: https://blogs.worldbank.org/opendata/introducing-wbgapi-new-python-package-accessing-world-bank-data
-
+        * Dokumentation:
+            https://blogs.worldbank.org/opendata/introducing-wbgapi-
+            new-python-package-accessing-world-bank-data
 
 
         Parameters:
-            countries (list): List of ISO3 Codes of countries for which series should be downloaded
-            series (list): List of series IDs which should be downloaded
-            dateRange (range): Range for which the data should be downloaded in years
+            countries (list): Liste der ISO3-Codes von Ländern, für die Zeitreihen heruntergeladen werden sollten.
+            series (dict): Dictionary von Weltbank Zeitreihen IDs als  keys und den sprechenden Namen als value.
+            dateRange (range): Range für die die Daten heruntergelanden werden sollen in Jahren.
         """
 
         # Für eine sinnvolle benamung werden die Zeitreihen IDs in einem
@@ -54,8 +64,8 @@ class wbAPI(object):
 
     def main(self) -> pd.DataFrame:
         """
-        Funktion, die die Orchestrierung der anderen Teile des
-        Programms steuert
+        Funktion, die die Orchestrierung der anderen Methoden des
+        Programms steuert.
         """
 
         self.extract_wb_api_data()
