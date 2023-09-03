@@ -43,7 +43,14 @@ if __name__ == "__main__":
         },
         "FAO": {
             "COUNTRIES": ["Ethiopia", "Kenya", "Somalia"],
-            "SERIES": {"FS": {"21001": "Number of people undernourished mil"}},
+            "SERIES": {"FS": {
+                "21001": "Anzahl Unterernährter Menschen",
+                "21004":"Anteil Unternährter Menschen",
+                "21010":"Durschnittliche Energie adequacy",
+                "21035":"Cereal import Abhängigkeit",
+                "21034":"Anteil Land zur Bewaesserung"
+                }
+            },
         },
     }
 

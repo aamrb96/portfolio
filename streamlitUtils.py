@@ -9,6 +9,7 @@ def simple_line_chart(title: str, x_series: pd.Series, y_series: pd.Series, y_la
     ax.plot(x_series, y_series)
 
     ax.set_ylabel(x_label)
+    ax.set_xticks(range(x_series.min(), x_series.max(), 5))
 
     ax.set_ylabel(y_label)
     ax.yaxis.set_tick_params(length = 0)

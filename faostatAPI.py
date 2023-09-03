@@ -58,8 +58,8 @@ class faostatAPI(object):
         if self.faostatData is None:
             raise Exception("Es wurden keine Daten gefunden")
         
-        # TODO: This is only valid for FS database
-        self.faostatData["element_renamed"] = self.faostatData["Area"] + "_" + self.faostatData["Item"]
+        self.faostatData = self.faostatData.replace({"Item Code":self.series["FS"]})
+        self.faostatData["element_renamed"] = self.faostatData["Area"] + "_" + self.faostatData["Item Code"]
         self.faostatData["element_renamed"] = self.faostatData["element_renamed"].str.replace(" ", "_")
 
         self.faostatData["Value"] = self.faostatData["Value"].astype(float)
@@ -67,6 +67,8 @@ class faostatAPI(object):
         self.faostatData["year"] = self.faostatData["Year"].str[:4].astype(int) + 1
 
         self.faostatData = self.faostatData.pivot(index = "year", columns = "element_renamed", values = "Value")
+
+        self.faostatData.columns = [column.replace(r'[^a-zA-Z0-9]', '_') for column in self.faostatData.columns]
 
 
         
@@ -82,13 +84,28 @@ class faostatAPI(object):
 if __name__ == "__main__":
     config = {
         "WB": {
-            "COUNTRIES": ["KEN", "SOM"],
-            "SERIES": {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"},
+            "COUNTRIES": ["KEN", "SOM", "ETH"],
+            "SERIES": {
+                "NY.GDP.MKTP.PP.CD": "GDP_ppp",
+                "FP.CPI.TOTL.ZG": "Inflation",
+                "NE.EXP.GNFS.CD": "Exports",
+                "NE.IMP.GNFS.CD": "Imports",
+                "SP.POP.0014.TO.ZS": "bevoelkerung_0_14",
+                "SP.POP.1564.TO.ZS": "bevoelkerung_14_65",
+                "SP.POP.65UP.TO.ZS": "bevoelkerung_65_plus"
+            },
             "DATERANGE": range(2000, 2024),
         },
         "FAO": {
             "COUNTRIES": ["Ethiopia", "Kenya", "Somalia"],
-            "SERIES": {"FS": {"21001": "Number of people undernourished mil"}},
+            "SERIES": {"FS": {
+                "21001": "Anzahl Unterernährter Menschen",
+                "21004":"Anteil Unternährter Menschen",
+                "21010":"Durschnittliche Energie adequacy",
+                "21035":"Cereal import Abhängigkeit",
+                "21034":"Anteil Land zur Bewaesserung"
+                }
+            },
         },
     }
 
