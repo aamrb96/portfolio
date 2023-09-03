@@ -1,18 +1,47 @@
 import sqlite3
 from wbAPI import wbAPI
+from faostatAPI import faostatAPI
 
-# Connect to SQLite database
-SQLITEPATH = 'my_database.db'
 
-conn = sqlite3.connect(SQLITEPATH)
+class saveDataToSQLite(object):
+    def __init__(
+        self, wb_api_instance: wbAPI, faostat_api_instance: faostatAPI
+    ) -> None:
+        self.wb_api = wb_api_instance
+        self.faostat_api = faostat_api_instance
 
-COUNTRIES = ["KEN", "SOM"]
-WB_SERIES = {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"}
-DATERANGE = range(2000, 2024)
-wb_data = wbAPI(countries=COUNTRIES, series=WB_SERIES, dateRange=DATERANGE).main()
+        self.wb_data = self.wb_api.main()
+        self.faostat_data = self.faostat_api.main()
 
-# Save DataFrame to SQLite
-wb_data.to_sql('other_table', conn, index=False, if_exists='replace')
+    def saveToSqlLite(self, path: str):
+        conn = sqlite3.connect(path)
 
-# Close the connection
-conn.close()
+        self.wb_data.to_sql("worldbank", conn, index=True, if_exists="replace")
+        self.faostat_data.to_sql("faostat", conn, index=True, if_exists="replace")
+
+        conn.close()
+
+
+if __name__ == "__main__":
+    # Connect to SQLite database
+    SQLITEPATH = "food_security_dashboard.db"
+
+    # Definition config Dictionary mit **kwargs
+    config = {
+        "WB": {
+            "COUNTRIES": ["KEN", "SOM"],
+            "SERIES": {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"},
+            "DATERANGE": range(2000, 2024),
+        },
+        "FAO": {
+            "COUNTRIES": ["Ethiopia", "Kenya", "Somalia"],
+            "SERIES": {"FS": {"21001": "Number of people undernourished mil"}},
+        },
+    }
+
+    wb_api = wbAPI(**config["WB"])
+    faostat_api = faostatAPI(**config["FAO"])
+
+    dataObjects = saveDataToSQLite(wb_api, faostat_api)
+
+    dataObjects.saveToSqlLite(path=SQLITEPATH)
