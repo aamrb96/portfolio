@@ -29,8 +29,16 @@ if __name__ == "__main__":
     # Definition config Dictionary mit **kwargs
     config = {
         "WB": {
-            "COUNTRIES": ["KEN", "SOM"],
-            "SERIES": {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"},
+            "COUNTRIES": ["KEN", "SOM", "ETH"],
+            "SERIES": {
+                "NY.GDP.MKTP.PP.CD": "GDP_ppp",
+                "FP.CPI.TOTL.ZG": "Inflation",
+                "NE.EXP.GNFS.CD": "Exports",
+                "NE.IMP.GNFS.CD": "Imports",
+                "SP.POP.0014.TO.ZS": "bevoelkerung_0_14",
+                "SP.POP.1564.TO.ZS": "bevoelkerung_14_65",
+                "SP.POP.65UP.TO.ZS": "bevoelkerung_65_plus"
+            },
             "DATERANGE": range(2000, 2024),
         },
         "FAO": {
