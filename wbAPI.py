@@ -12,17 +12,17 @@ class wbAPI(object):
     Die Methode main() orchestriert alle Methoden innerhalb der Klasse.
     """
 
-    def __init__(self, countries: list, series: dict, dateRange: range) -> None:
+    def __init__(self, **kwargs) -> None:
         """
         Parameters:
             countries (list): Liste der ISO3-Codes von Ländern, für die Zeitreihen heruntergeladen werden sollten.
             series (dict): Dictionary von Weltbank Zeitreihen IDs als  keys und den sprechenden Namen als value.
             dateRange (range): Range für die die Daten heruntergelanden werden sollen in Jahren.
         """
-        
-        self.countries = countries
-        self.series = series
-        self.dateRange = dateRange
+
+        self.countries = kwargs.get("COUNTRIES")
+        self.series = kwargs.get("SERIES")
+        self.dateRange = kwargs.get("DATERANGE")
 
     def extract_wb_api_data(self) -> None:
         """
@@ -76,8 +76,16 @@ class wbAPI(object):
 
 
 if __name__ == "__main__":
-    COUNTRIES = ["KEN", "SOM"]
-    WB_SERIES = {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"}
-    DATERANGE = range(2000, 2024)
+    config = {
+        "WB": {
+            "COUNTRIES": ["KEN", "SOM"],
+            "SERIES": {"NY.GDP.MKTP.PP.CD": "GDP_ppp", "FP.CPI.TOTL.ZG": "Inflation"},
+            "DATERANGE": range(2000, 2024),
+        },
+        "FAO": {
+            "COUNTRIES": ["Ethiopia", "Kenya", "Somalia"],
+            "FAOSTAT_SERIES": {"FS": {"21001": "Number of people undernourished mil"}},
+        },
+    }
 
-    wb_data = wbAPI(countries=COUNTRIES, series=WB_SERIES, dateRange=DATERANGE).main()
+    wb_data = wbAPI(**config["WB"]).main()
